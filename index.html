@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chatback</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase-firestore.js"></script>
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+
+<body>
+    <div id="about">
+        <u>About</u>
+        <br>
+        <br> Chatback is a peer-to-peer support tool designed to help you through troubling situations.
+        <br>
+        <br> The tool encourages you to practice introspective and empathetic techniques through anonymity and prompts given by a conversation agent.
+        <br>
+        <br> This tool is being developed at the University of Washington. This is an early prototype and your feedback is welcome. Contact Katie O’Leary, PhD, kathlo@uw.edu.
+    </div>
+    <div id="container">
+        <div id="namesWrapper">
+			<h1>Chatback</h1>
+			<br>
+			<p>Create username:</p>
+			<div id="error"></div>
+			<form id="usernameForm">
+				<input type="text" size="35" id="username" placeholder="Enter username here...">
+				<input type="submit" value="Submit">
+			</form>
+		</div>
+        <!-- Main page -->
+        <div id="mainWrapper">
+            <h1>Chatback</h1>
+            </br>
+            <div id="chatWrapper">
+                <!-- Window in which all chat messages will be appended to, initialized with prompt 1 -->
+                <div id="chatWindow">
+                    <strong><em>Chatback:</strong> Waiting on partner to join...</em>
+                    </br>
+                </div>
+            </div>
+            <!-- Div of all the buttons associated with the expressive prompts, outer buttons only appear when their respective prompt (promptcount)
+				is the current prompt, inner buttons only appear when their respective outer button is clicked, buttons have class "hidden" to hide them -->
+            <div id="buttonbar">
+                <!-- Concern buttons -->
+                <div id="concernouter">
+                    <button class="button btn btn-primary outer" value="I have " title="Click to view self-actualization concerns">self-actualization</button>
+                    <button class="button btn btn-primary outer" value="I have " title="Click to view esteem concerns">esteem</button>
+                    <button class="button btn btn-primary outer" value="I have " title="Click to view love/belonging concerns">love/belonging</button>
+                    <button class="button btn btn-primary outer" value="I have " title="Click to view safety/security concerns">safety/security</button>
+                    <button class="button btn btn-primary outer" value="I have " title="Click to view physiological concerns">physiological</button>
+                </div>
+                <div id="self-actualization" class="hidden">
+                    <button class="btn btn-primary back" title="Go back">back</button>
+                    <button class="button btn btn-info" value="a morality concern that ">morality</button>
+                    <button class="button btn btn-info" value="a creativity concern that ">creativity</button>
+                    <button class="button btn btn-info" value="an acceptance concern that ">acceptance</button>
+                    <button class="button btn btn-info" value="a purpose concern that ">purpose</button>
+                    <button class="button btn btn-info" value="a meaning concern that ">meaning</button>
+                    <button class="button btn btn-info" value="an inner potential concern that ">inner potential</button>
+                </div>
+                <div id="esteem" class="hidden">
+                    <button class="btn btn-primary back" title="Go back">back</button>
+                    <button class="button btn btn-info" value="a confidence concern that ">confidence</button>
+                    <button class="button btn btn-info" value="an achievement concern that ">achievement</button>
+                    <button class="button btn btn-info" value="a respect of others concern that ">respect of others</button>
+                    <button class="button btn btn-info" value="a need to be a unique individual concern that ">need to be a unique individual</button>
+                </div>
+                <div id="love/belonging" class="hidden">
+                    <button class="btn btn-primary back" title="Go back">back</button>
+                    <button class="button btn btn-info" value="a friendship concern that ">friendship</button>
+                    <button class="button btn btn-info" value="a family concern that ">family</button>
+                    <button class="button btn btn-info" value="an intimacy concern that ">intimacy</button>
+                    <button class="button btn btn-info" value="a sense of connection concern that ">sense of connection</button>
+                </div>
+                <div id="safety/security" class="hidden">
+                    <button class="btn btn-primary back" title="Go back">back</button>
+                    <button class="button btn btn-info" value="a health concern that ">health</button>
+                    <button class="button btn btn-info" value="an employment concern that ">employment</button>
+                    <button class="button btn btn-info" value="a property concern that ">property</button>
+                    <button class="button btn btn-info" value="a family and social stability concern that ">family and social stability</button>
+                </div>
+                <div id="physiological" class="hidden">
+                    <button class="btn btn-primary back" title="Go back">back</button>
+                    <button class="button btn btn-info" value="a breathing concern that ">breathing</button>
+                    <button class="button btn btn-info" value="a food concern that ">food</button>
+                    <button class="button btn btn-info" value="a water concern that ">water</button>
+                    <button class="button btn btn-info" value="a shelter concern that ">shelter</button>
+                    <button class="button btn btn-info" value="a clothing concern that ">clothing</button>
+                    <button class="button btn btn-info" value="a sleep concern that ">sleep</button>
+                </div>
+                <!-- Want buttons -->
+                <div id="wantouter" class="hidden">
+                    <button class="button btn btn-primary outer" value="I want to feel " title="Click to view peaceful feelings">peaceful</button>
+                    <button class="button btn btn-primary outer" value="I want to feel " title="Click to view powerful feelings">powerful</button>
+                    <button class="button btn btn-primary outer" value="I want to feel " title="Click to view joyful feelings">joyful</button>
+                </div>
+                <div id="peaceful" class="hidden">
+                    <button class="btn btn-primary back" title="Go back">back</button>
+                    <button class="button btn btn-info" value="content ">content</button>
+                    <button class="button btn btn-info" value="thoughtful ">thoughtful</button>
+                    <button class="button btn btn-info" value="intimate ">intimate</button>
+                    <button class="button btn btn-info" value="loving ">loving</button>
+                    <button class="button btn btn-info" value="trusting ">trusting</button>
+                    <button class="button btn btn-info" value="nurturing ">nurturing</button>
+                    <button class="button btn btn-info" value="relaxed ">relaxed</button>
+                    <button class="button btn btn-info" value="pensive ">pensive</button>
+                    <button class="button btn btn-info" value="responsive ">responsive</button>
+                    <button class="button btn btn-info" value="serene ">serene</button>
+                    <button class="button btn btn-info" value="secure ">secure</button>
+                    <button class="button btn btn-info" value="thankful ">thankful</button>
+                </div>
+                <div id="powerful" class="hidden">
+                    <button class="btn btn-primary back" title="Go back">back</button>
+                    <button class="button btn btn-info" value="aware ">aware</button>
+                    <button class="button btn btn-info" value="proud ">proud</button>
+                    <button class="button btn btn-info" value="respected ">respected</button>
+                    <button class="button btn btn-info" value="appreciated ">appreciated</button>
+                    <button class="button btn btn-info" value="important ">important</button>
+                    <button class="button btn btn-info" value="confident ">confident</button>
+                    <button class="button btn btn-info" value="discerning ">discerning</button>
+                    <button class="button btn btn-info" value="valuable ">valuable</button>
+                    <button class="button btn btn-info" value="worthwhile ">worthwhile</button>
+                    <button class="button btn btn-info" value="successful ">successful</button>
+                </div>
+                <div id="joyful" class="hidden">
+                    <button class="btn btn-primary back" title="Go back">back</button>
+                    <button class="button btn btn-info" value="excited ">excited</button>
+                    <button class="button btn btn-info" value="cheerful ">cheerful</button>
+                    <button class="button btn btn-info" value="energetic ">energetic</button>
+                    <button class="button btn btn-info" value="sensuous ">sensuous</button>
+                    <button class="button btn btn-info" value="creative ">creative</button>
+                    <button class="button btn btn-info" value="hopeful ">hopeful</button>
+                    <button class="button btn btn-info" value="daring ">daring</button>
+                    <button class="button btn btn-info" value="fascinated ">fascinated</button>
+                    <button class="button btn btn-info" value="amused ">amused</button>
+                    <button class="button btn btn-info" value="playful ">playful</button>
+                    <button class="button btn btn-info" value="optimistic ">optimistic</button>
+                </div>
+                <!-- Thought buttons -->
+                <div id="thought" class="hidden">
+                    <button class="button btn btn-primary" value="I have a personalizing thought " title="Personalizing: thinking a bad outcome results from a bad in you">personalizing</button>
+                    <button class="button btn btn-primary" value="I have a worst case scenario thought " title="Worst case scenario: believing the worst is going to happen">worst case scenario</button>
+                    <button class="button btn btn-primary" value="I have an overgeneralizing thought " title="Overgeneralizing: thinking all incidents will be exactly like the one incident">overgeneralizing</button>
+                    <button class="button btn btn-primary" value="I have a blaming thought " title="Blaming: faulting a single source for all the trouble">blaming</button>
+                    <button class="button btn btn-primary" value="I have a mind reading thought " title="Mindreading: assuming you know people’s reasons or judgments">mind reading</button>
+                    <button class="button btn btn-primary" value="I have an all or nothing thought " title="All or nothing thinking: simplifying into two extremes (e.g., either all good/all bad)">all or nothing</button>
+                </div>
+                <!-- Feeling buttons deprecated -->
+                <div id="feelingouter" class="hidden">
+                    <button class="button btn btn-primary outer" value="I'm feeling " title="Click to view scared feelings">scared</button>
+                    <button class="button btn btn-primary outer" value="I'm feeling " title="Click to view mad feelings">mad</button>
+                    <button class="button btn btn-primary outer" value="I'm feeling " title="Click to view sad feelings">sad</button>
+                </div>
+                <div id="scared" class="hidden">
+                    <button class="btn btn-primary back" title="Go back">back</button>
+                    <button class="button btn btn-info" value="confused ">confused</button>
+                    <button class="button btn btn-info" value="rejected ">rejected</button>
+                    <button class="button btn btn-info" value="helpless ">helpless</button>
+                    <button class="button btn btn-info" value="submissive ">submissive</button>
+                    <button class="button btn btn-info" value="insecure ">insecure</button>
+                    <button class="button btn btn-info" value="anxious ">anxious</button>
+                    <button class="button btn btn-info" value="bewildered ">bewildered</button>
+                    <button class="button btn btn-info" value="discouraged ">discouraged</button>
+                    <button class="button btn btn-info" value="insignificant ">insignificant</button>
+                    <button class="button btn btn-info" value="inadequate ">inadequate</button>
+                    <button class="button btn btn-info" value="embarrassed ">embarrassed</button>
+                    <button class="button btn btn-info" value="overwhelmed ">overwhelmed</button>
+                </div>
+                <div id="mad" class="hidden">
+                    <button class="btn btn-primary back" title="Go back">back</button>
+                    <button class="button btn btn-info" value="hurt ">hurt</button>
+                    <button class="button btn btn-info" value="hostile ">hostile</button>
+                    <button class="button btn btn-info" value="angry ">angry</button>
+                    <button class="button btn btn-info" value="selfish ">selfish</button>
+                    <button class="button btn btn-info" value="hateful ">hateful</button>
+                    <button class="button btn btn-info" value="critical ">critical</button>
+                    <button class="button btn btn-info" value="distant ">distant</button>
+                    <button class="button btn btn-info" value="sarcastic ">sarcastic</button>
+                    <button class="button btn btn-info" value="frustrated ">frustrated</button>
+                    <button class="button btn btn-info" value="jealous ">jealous</button>
+                    <button class="button btn btn-info" value="irritated ">irritated</button>
+                    <button class="button btn btn-info" value="skeptical ">skeptical</button>
+                </div>
+                <div id="sad" class="hidden">
+                    <button class="btn btn-primary back" title="Go back">back</button>
+                    <button class="button btn btn-info" value="guilty ">guilty</button>
+                    <button class="button btn btn-info" value="ashamed ">ashamed</button>
+                    <button class="button btn btn-info" value="depressed ">depressed</button>
+                    <button class="button btn btn-info" value="lonely ">lonely</button>
+                    <button class="button btn btn-info" value="bored ">bored</button>
+                    <button class="button btn btn-info" value="tired ">tired</button>
+                    <button class="button btn btn-info" value="sleepy ">sleepy</button>
+                    <button class="button btn btn-info" value="apathetic ">apathetic</button>
+                    <button class="button btn btn-info" value="isolated ">isolated</button>
+                    <button class="button btn btn-info" value="inferior ">inferior</button>
+                    <button class="button btn btn-info" value="stupid ">stupid</button>
+                    <button class="button btn btn-info" value="remorseful ">remorseful</button>
+                </div>
+                <!-- Strategy buttons -->
+                <div id="strategy" class="hidden">
+                    <button class="button btn btn-primary" value="I'll try a mindful strategy of " title="Mindful: noticing and/or changing your thoughts and attitudes in ways that help you">mindful</button>
+                    <button class="button btn btn-primary" value="I'll try a physical strategy of " title="Physical: noticing and/or changing the actions of your body, like breathing, exercising, moving in ways that help you">physical</button>
+                    <button class="button btn btn-primary" value="I'll try social strategy of " title="Social: noticing and/or changing how you interact and communicate with people, or engage with places, in ways that help you">social</button>
+                </div>
+            </div>
+            <!-- Textarea to type messages -->
+            <textarea id="textarea" class="form-control" placeholder="Type your message here..."></textarea>
+            <!-- Ready for next prompt button -->
+            <button id="ready" class="btn btn-success">Next prompt</button>
+        </div>
+    </div>
+    <!-- <div id="loginWrapper">
+        <h1 id="startTitle">Chatback</h1>
+        <button id="login" class="loginItem">Login with Google</button>
+        <button id="logout" class="loginItem">Logout</button><br/>
+    </div> -->
+    <script src="app.js"></script>
+</body>
+
+</html>

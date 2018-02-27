@@ -1,0 +1,109 @@
+#login {
+    padding: 0.5em 1em;
+    background-color: #DD4B39;
+    border: none;
+    color: #FFF;
+    cursor: pointer;
+}
+
+#about {
+    border: 1px #ccc solid;
+    background-color: #ffffca;
+    border-radius: 10px;
+    float: left;
+    margin: 76px 50px;
+    padding: 10px;
+    width: 300px;
+    display: none;
+}
+
+body {
+    background: #f9f9f9;
+}
+
+.btn {
+    margin-bottom: 10px;
+}
+
+#buttonbar {
+    float: bottom;
+    height: 438px;
+    width: 800px;
+}
+
+#chatWindow {
+    height: 300px;
+    overflow-y: scroll;
+}
+
+#chatWrapper {
+    background: #f4f4f4;
+    border: 1px #ccc solid;
+    border-radius: 10px;
+    float: left;
+    margin-bottom: 20px;
+    padding: 10px;
+    width: 800px;
+}
+
+#container {
+    margin: 0 auto;
+    width: 700px;
+}
+
+.hidden {
+    display: none;
+}
+
+input {
+    border: solid 1px #ccc;
+    height: 30px;
+}
+
+.loginItem {
+    margin: 5px;
+}
+
+#loginWrapper {
+    float: left;
+    margin-left: 50px;
+    padding: 10px;
+    width: 300px;
+}
+
+#mainWrapper {
+    display: none;
+    width: 1000px;
+}
+
+#namesWrapper {
+    background: #f4f4f4;
+    border: 1px #ccc solid;
+    border-radius: 10px;
+    float: left;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+#textarea {
+    height: 100px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    width: 800px;
+}
+
+#users {
+    overflow: auto;
+}
+
+#userWrapper {
+    background: #f4f4f4;
+    border: 1px #ccc solid;
+    border-radius: 10px;
+    float: left;
+    margin-left: 20px;
+    max-height: 200px;
+    padding: 10px;
+    width: 150px;
+    display: none;
+}
